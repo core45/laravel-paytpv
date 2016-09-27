@@ -1,7 +1,7 @@
 {
     "name": "core45/laravel-paytpv",
     "description": "Payment module of PAYTPV BankStore IFRAME/FULLSCREEN/XML/JET for Laravel 5.x",
-    "keywords": ["laravel", "paytpv", "BankStore IFRAME/FULLSCREEN/XML/JET"], 
+    "keywords": ["laravel", "paytpv", "BankStore"], 
     "license": "BSD License (3-clause)",
     "authors": [
         {
