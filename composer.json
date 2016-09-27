@@ -1,0 +1,22 @@
+{
+    "name": "core45/paytpv",
+    "description": "Payment module of PAYTPV BankStore IFRAME/FULLSCREEN/XML/JET for Laravel 5.x",
+    "keywords": ["laravel", "paytpv", "BankStore IFRAME/FULLSCREEN/XML/JET"], 
+    "license": "BSD License (3-clause)",
+    "authors": [
+        {
+            "name": "Kornel Kornecki",
+            "email": "kornel@outlook.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Core45\\laravel-paytpv\\": "src/"
+        }
+    }
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^5.6 || 7.0",
+        "ext-soap": "*.*"
+    }
+}
