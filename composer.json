@@ -13,7 +13,7 @@
         "psr-4": {
             "Core45\\laravel-paytpv\\": "src/"
         }
-    }
+    },
     "require": {
         "php": ">=5.6",
         "ext-soap": "*.*"
