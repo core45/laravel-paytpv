@@ -16,7 +16,7 @@ use stdClass;
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @package    Laravel PAYTPV based on version 1.1.0 of library PAYTPV-COMPOSER-XML-Bankstore made by PAYTPV (www.paytpv.com)
- * @version    1.1.0
+ * @version    1.0.0-alpha2
  * @author     Kornel Kornecki
  * @license    BSD License (3-clause)
  * @copyright  (c) 2016, Kornel Kornecki
@@ -37,39 +37,28 @@ class Paytpv
     public function __construct()
     {
         $this->merchantCode = config('paytpv.merchantCode');
-        $this->terminal = config('paytpv.terminal');;
-        $this->password = config('paytpv.password');;
-        $this->jetid = config('paytpv.jetid');;
+        $this->terminal = config('paytpv.terminal');
+        $this->password = config('paytpv.password');
+        $this->jetid = config('paytpv.jetid');
         $this->endpoint = 'https://secure.paytpv.com/gateway/xml-bankstore?wsdl';
         $this->endpointurl = 'https://secure.paytpv.com/gateway/ifr-bankstore?';
     }
 
-    public function Test()
-    {
-        return "Uhahaha!";
-    }
-
-    public function ok()
-    {
-        return "OK ok ok ok ok!";
-    }
-
-    public function ko()
-    {
-        return "KO kokokokoooooo!";
-    }
-
     /**
-     * BANKSTORE XML INTEGRATION --------------------------------------------------->
+     * BANKSTORE XML INTEGRATION 
      */
 
     /**
+     * Add a card to PAYTPV. IMPORTANT! This feature must be activated by PAYTPV for you.
+     * By default the method of adding the card to the system should be either AddUserUrl or AddUserToken (which is used for BankStore JET).
+     *
      * Añade una tarjeta a PAYTPV. ¡¡¡ IMPORTANTE !!! Esta entrada directa debe ser activada por PAYTPV.
      * En su defecto el método de entrada de tarjeta para el cumplimiento del PCI-DSS debe ser AddUserUrl o AddUserToken (método utilizado por BankStore JET)
-     * @param int $pan Número de tarjeta, sin espacios ni guiones
-     * @param string $expdate Fecha de caducidad de la tarjeta, expresada como “mmyy” (mes en dos cifras y año en dos cifras)
-     * @param string $cvv Código CVC2 de la tarjeta
-     * @return object Objeto de respuesta de la operación
+     *
+     * @param int $pan The card number with no spaces or dashes. Número de tarjeta, sin espacios ni guiones
+     * @param string $expdate Expiration date expressed as "mmyy" (two digits for month and two digits for year). Fecha de caducidad de la tarjeta, expresada como “mmyy” (mes en dos cifras y año en dos cifras)
+     * @param string $cvv CVC2 code. Código CVC2 de la tarjeta.
+     * @return object Object containing the response. Objeto de respuesta de la operación.
      * @version 2.0 2016-06-02
      */
 
@@ -79,12 +68,15 @@ class Paytpv
         $expdate = preg_replace('/\s+/', '', $expdate);
         $cvv = preg_replace('/\s+/', '', $cvv);
         $signature = sha1($this->merchantCode.$pan.$cvv.$this->terminal.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->add_user($this->merchantCode, $this->terminal, $pan, $expdate, $cvv, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -92,22 +84,27 @@ class Paytpv
     }
 
     /**
-     * Elimina un usuario de PAYTPV mediante llamada soap
-     * @param int $idpayuser Id de usuario en PAYTPV
-     * @param string $tokenpayuser Token de usuario en PAYTPV
-     * @return object Objeto de respuesta de la operación
+     * Remove the user from PAYTPV system.
+     * Elimina un usuario de PAYTPV mediante llamada soap.
+     * 
+     * @param int $idpayuser Id of the user in PAYTPV. Id de usuario en PAYTPV.
+     * @param string $tokenpayuser Token of the user in PAYTPV. Token de usuario en PAYTPV.
+     * @return object Object containing the response. Objeto de respuesta de la operación.
      * @version 1.0 2016-06-02
      */
     public function RemoveUser($idpayuser, $tokenpayuser)
     {
 
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try {
+        try 
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->remove_user($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -115,21 +112,26 @@ class Paytpv
     }
 
     /**
-     * Devuelve la información de un usuario almacenada en PAYTPV mediante llamada soap
-     * @param int $idpayuser Id del usuario en PAYTPV
-     * @param string $tokenpayuser Token del usuario en PAYTPV
-     * @return object Objeto de respuesta de la operación
+     * Return the information about the user stored in PAYTPV system.
+     * Devuelve la información de un usuario almacenada en PAYTPV mediante llamada soap.
+     *
+     * @param int $idpayuser Id of the user in PAYTPV. Id del usuario en PAYTPV.
+     * @param string $tokenpayuser Token of the user in PAYTPV. Token del usuario en PAYTPV
+     * @return object Object containing the response. Objeto de respuesta de la operación.
      * @version 1.0 2016-06-02
      */
     public function InfoUser($idpayuser, $tokenpayuser)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->info_user($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -137,8 +139,10 @@ class Paytpv
     }
 
     /**
-     * Ejecuta un pago por web service
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * Execute a payment using webservice.
+     * Ejecuta un pago por web service.
+     * 
+     * @param int $idpayuser Id of the user in PAYTPV.  Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -150,15 +154,18 @@ class Paytpv
      * @version 2.0 2016-06-02
      */
 
-    public function ExecutePurchase($idpayuser, $tokenpayuser, $amount, $transreference, $currency, $productdescription, $owner, $scoring = null)
+    public function ExecutePurchase($idpayuser, $tokenpayuser, $amount, $transreference, $currency, $productdescription, $owner = null, $scoring = null)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$amount.$transreference.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->execute_purchase($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $currency, $signature, $ip, $productdescription, $owner, $scoring);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -167,7 +174,7 @@ class Paytpv
 
     /**
      * Ejecuta un pago por web service con la operativa DCC
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV.  Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -180,12 +187,15 @@ class Paytpv
     public function ExecutePurchaseDcc($idpayuser, $tokenpayuser, $amount, $transreference, $productdescription = false, $owner = false)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$amount.$transreference.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->execute_purchase_dcc($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $signature, $ip, $productdescription, $owner);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -205,10 +215,13 @@ class Paytpv
     {
         $signature = sha1($this->merchantCode.$this->terminal.$transreference.$dcccurrency.$dccsession.$this->password);
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->confirm_purchase_dcc($this->merchantCode, $this->terminal, $transreference, $dcccurrency, $dccsession, $signature);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -217,7 +230,7 @@ class Paytpv
 
     /**
      * Ejecuta una devolución de un pago por web service
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV.  Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $transreference Identificador único del pago
      * @param string $currency Identificador de la moneda de la operación
@@ -230,12 +243,15 @@ class Paytpv
     public function ExecuteRefund($idpayuser, $tokenpayuser, $transreference, $currency, $authcode, $amount = NULL)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$authcode.$transreference.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->execute_refund($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $authcode, $transreference, $currency, $signature, $ip, $amount);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -266,12 +282,15 @@ class Paytpv
         $expdate = preg_replace('/\s+/', '', $expdate);
         $cvv = preg_replace('/\s+/', '', $cvv);
         $signature = sha1($this->merchantCode.$pan.$cvv.$this->terminal.$amount.$currency.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->create_subscription($this->merchantCode, $this->terminal, $pan, $expdate, $cvv, $startdate, $enddate, $transreference, $periodicity, $amount, $currency, $signature, $ip, 1, $ownerName, $scoring);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -280,7 +299,7 @@ class Paytpv
 
     /**
      * Modifica una suscripción en PAYTPV sobre una tarjeta.
-     * @param string $idpayuser Identificador único del usuario registrado en el sistema.
+     * @param string $idpayuser Id of the user in PAYTPV. Identificador único del usuario registrado en el sistema.
      * @param string $tokenpayuser Código token asociado al IDUSER.
      * @param string $startdate Fecha de inicio de la suscripción yyyy-mm-dd
      * @param string $enddate Fecha de fin de la suscripción yyyy-mm-dd
@@ -294,12 +313,15 @@ class Paytpv
     public function EditSubscription($idpayuser, $tokenpayuser, $startdate, $enddate, $periodicity, $amount, $execute)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$amount.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->edit_subscription($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $startdate, $enddate, $periodicity, $amount, $signature, $execute, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -308,7 +330,7 @@ class Paytpv
 
     /**
      * Elimina una suscripción en PAYTPV sobre una tarjeta.
-     * @param string $idpayuser Identificador único del usuario registrado en el sistema.
+     * @param string $idpayuser Id of the user in PAYTPV. Identificador único del usuario registrado en el sistema.
      * @param string $tokenpayuser Código token asociado al IDUSER.
      * @return object Objeto de respuesta de la operación
      * @version 2.0 2016-06-07
@@ -317,12 +339,15 @@ class Paytpv
     public function RemoveSubscription($idpayuser, $tokenpayuser)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->remove_subscription($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -331,7 +356,7 @@ class Paytpv
 
     /**
      * Crea una suscripción en PAYTPV sobre una tarjeta tokenizada previamente.
-     * @param string $idpayuser Identificador único del usuario registrado en el sistema.
+     * @param string $idpayuser Id of the user in PAYTPV. Identificador único del usuario registrado en el sistema.
      * @param string $tokenpayuser Código token asociado al IDUSER.
      * @param string $startdate Fecha de inicio de la suscripción yyyy-mm-dd
      * @param string $enddate Fecha de fin de la suscripción yyyy-mm-dd
@@ -347,12 +372,15 @@ class Paytpv
     public function CreateSubscriptionToken($idpayuser, $tokenpayuser, $startdate, $enddate, $transreference, $periodicity, $amount, $currency, $scoring = null)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$amount.$currency.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->create_subscription_token($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $startdate, $enddate, $transreference, $periodicity, $amount, $currency, $signature, $ip, $scoring);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -361,7 +389,7 @@ class Paytpv
 
     /**
      * Crea una preautorización por web service
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV. Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -376,12 +404,15 @@ class Paytpv
     public function CreatePreauthorization($idpayuser, $tokenpayuser, $amount, $transreference, $currency, $productdescription = false, $owner = false, $scoring = null)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$amount.$transreference.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->create_preauthorization($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $currency, $signature, $ip, $productdescription, $owner, $scoring);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -390,7 +421,7 @@ class Paytpv
 
     /**
      * Confirma una preautorización por web service previamente enviada
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV. Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -401,12 +432,15 @@ class Paytpv
     public function PreauthorizationConfirm($idpayuser, $tokenpayuser, $amount, $transreference)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$transreference.$amount.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->preauthorization_confirm($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -415,7 +449,7 @@ class Paytpv
 
     /**
      * Cancela una preautorización por web service previamente enviada
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV. Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -426,12 +460,15 @@ class Paytpv
     public function PreauthorizationCancel($idpayuser, $tokenpayuser, $amount, $transreference)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$transreference.$amount.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->preauthorization_cancel($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -440,7 +477,7 @@ class Paytpv
 
     /**
      * Confirma una preautorización diferida por web service. Una vez realizada y autorizada una operación de preautorización diferida, puede confirmarse para realizar el cobro efectivo dentro de las 72 horas siguientes; pasada esa fecha, las preautorizaciones diferidas pierden su validez.
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV. Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -451,12 +488,15 @@ class Paytpv
     public function DeferredPreauthorizationConfirm($idpayuser, $tokenpayuser, $amount, $transreference)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$transreference.$amount.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->deferred_preauthorization_confirm($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -465,7 +505,7 @@ class Paytpv
 
     /**
      * Cancela una preautorización diferida por web service.
-     * @param int $idpayuser Id del usuario en PAYTPV
+     * @param int $idpayuser Id of the user in PAYTPV. Id del usuario en PAYTPV.
      * @param string $tokenpayuser Token del usuario en PAYTPV
      * @param string $amount Importe del pago 1€ = 100
      * @param string $transreference Identificador único del pago
@@ -476,12 +516,15 @@ class Paytpv
     public function DeferredPreauthorizationCancel($idpayuser, $tokenpayuser, $amount, $transreference)
     {
         $signature = sha1($this->merchantCode.$idpayuser.$tokenpayuser.$this->terminal.$transreference.$amount.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->deferred_preauthorization_cancel($this->merchantCode, $this->terminal, $idpayuser, $tokenpayuser, $amount, $transreference, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -503,10 +546,13 @@ class Paytpv
     {
         $signature = sha1($this->merchantCode.$this->terminal.$amount.$transreference.$rtoken.$this->password);
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->execute_purchase_rtoken($this->merchantCode, $this->terminal, $amount, $transreference, $rtoken, $currency, $signature, $productdescription);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -528,12 +574,15 @@ class Paytpv
     public function AddUserToken($jettoken)
     {
         $signature = sha1($this->merchantCode.$jettoken.$this->jetid.$this->terminal.$this->password);
-        $ip	= $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
-        try{
+        try
+        {
             $clientSOAP = new SoapClient($this->endpoint);
             $ans = $clientSOAP->add_user_token($this->merchantCode, $this->terminal, $jettoken, $this->jetid, $signature, $ip);
-        } catch(SoapFault $e){
+        } 
+        catch(SoapFault $e)
+        {
             return $this->SendResponse();
         }
 
@@ -562,18 +611,24 @@ class Paytpv
         $pretest = array();
 
         $operation = new stdClass();
+        $operation->IdUseer = null;
         $operation->Type = 1;
         $operation->Reference = $transreference;
         $operation->Amount = $amount;
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) {
+        $operation->Secure3D = $secure3d;
+
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
+
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -588,7 +643,7 @@ class Paytpv
      * @param string $transreference Identificador único del pago
      * @param string $amount Importe del pago 1€ = 100
      * @param string $currency Identificador de la moneda de la operación
-     * @param string $iduser Identificador único del usuario registrado en el sistema.
+     * @param string $iduser Id of the user in PAYTPV. Identificador único del usuario registrado en el sistema.
      * @param string $tokenuser Código token asociado al IDUSER.
      * @param string $lang Idioma de los literales de la transacción
      * @param string $description Descripción de la operación
@@ -611,10 +666,12 @@ class Paytpv
         $operation->TokenUser = $tokenuser;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
@@ -681,10 +738,12 @@ class Paytpv
         $operation->StartDate = $startdate;
         $operation->EndDate = $enddate;
         $operation->Periodicity = $periodicity;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
@@ -728,10 +787,12 @@ class Paytpv
         $operation->Periodicity = $periodicity;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
@@ -767,10 +828,12 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
@@ -809,12 +872,14 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
-        if ($check_user_exist->DS_ERROR_ID != 0) {
+        if ($check_user_exist->DS_ERROR_ID != 0) 
+        {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
 
@@ -854,12 +919,14 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
-        if ($check_user_exist->DS_ERROR_ID != 0) {
+        if ($check_user_exist->DS_ERROR_ID != 0) 
+        {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
 
@@ -900,14 +967,17 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
-        if ($check_user_exist->DS_ERROR_ID != 0) {
+        if ($check_user_exist->DS_ERROR_ID != 0) 
+        {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
 
@@ -944,10 +1014,12 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
-        if ($scoring) {
+        if ($scoring) 
+        {
             $operation->Scoring = (int)$scoring;
         }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
@@ -986,12 +1058,14 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
-        if ($check_user_exist->DS_ERROR_ID != 0) {
+        if ($check_user_exist->DS_ERROR_ID != 0) 
+        {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
 
@@ -1031,12 +1105,14 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) {
+        if ($secure3d != false) 
+        {
             $operation->Secure3D = $secure3d;
         }
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
-        if ($check_user_exist->DS_ERROR_ID != 0) {
+        if ($check_user_exist->DS_ERROR_ID != 0) 
+        {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
 
@@ -1058,14 +1134,20 @@ class Paytpv
     private function SendResponse($respuesta = false)
     {
         $result = new stdClass();
-        if (!is_array($respuesta)) {
+        if (!is_array($respuesta)) 
+        {
             $result->RESULT = "KO";
             $result->DS_ERROR_ID = 1011; // No se pudo conectar con el host
-        } else {
+        }
+        else 
+        {
             $result = (object)$respuesta;
-            if ($respuesta["DS_ERROR_ID"] != "" && $respuesta["DS_ERROR_ID"] != 0) {
+            if ($respuesta["DS_ERROR_ID"] != "" && $respuesta["DS_ERROR_ID"] != 0) 
+            {
                 $result->RESULT = "KO";
-            } else {
+            } 
+            else 
+            {
                 $result->RESULT = "OK";
             }
         }
@@ -1085,34 +1167,57 @@ class Paytpv
         $hash = false;
 
         $reference = $operationdata->Reference;
-        $amount = $operationdata->Amount;
-        $currency = $operationdata->Currency;
-        $iduser = $operationdata->IdUser;
-        $tokenuser = $operationdata->TokenUser;
+        $amount = (isset($operationdata->Amount) ? $operationdata->Amount : '');
+        $currency = (isset($operationdata->Currency)) ? $operationdata->Currency : 'EUR';
+        $iduser = (isset($operationdata->IdUser)) ? $operationdata->IdUser : '';
+        $tokenuser = (isset($operationdata->TokenUser)) ? $operationdata->TokenUser : '';
 
-        if ((int)$operationtype == 1) {				// Authorization (execute_purchase)
+        if ((int)$operationtype == 1) 
+        {             // Authorization (execute_purchase)
             $hash = md5($this->merchantCode.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 3) {		// Preauthorization
+        } 
+        elseif ((int)$operationtype == 3) 
+        {       // Preauthorization
             $hash = md5($this->merchantCode.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 6) {		// Confirmación de Preauthorization
+        } 
+        elseif ((int)$operationtype == 6) 
+        {       // Confirmación de Preauthorization
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.md5($this->password));
-        } elseif ((int)$operationtype == 4) {		// Cancelación de Preauthorization
+        } 
+        elseif ((int)$operationtype == 4) 
+        {       // Cancelación de Preauthorization
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.md5($this->password));
-        } elseif ((int)$operationtype == 9) {		// Subscription
+        } 
+        elseif ((int)$operationtype == 9) 
+        {       // Subscription
             $hash = md5($this->merchantCode.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 107) {		// Add_user
+        } 
+        elseif ((int)$operationtype == 107) 
+        {     // Add_user
             $hash = md5($this->merchantCode.$this->terminal.$operationtype.$reference.md5($this->password));
-        } elseif ((int)$operationtype == 109) {		// execute_purchase_token
+        } 
+        elseif ((int)$operationtype == 109) 
+        {     // execute_purchase_token
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 110) {		// create_subscription_token
+        } 
+        elseif ((int)$operationtype == 110) 
+        {     // create_subscription_token
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 111) {		// create_preauthorization_token
+        } 
+        elseif ((int)$operationtype == 111) 
+        {     // create_preauthorization_token
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 13) {		// Preauthorization Diferida
+        } 
+        elseif ((int)$operationtype == 13) 
+        {      // Preauthorization Diferida
             $hash = md5($this->merchantCode.$this->terminal.$operationtype.$reference.$amount.$currency.md5($this->password));
-        } elseif ((int)$operationtype == 16) {		// Confirmación de Preauthorization Diferida
+        } 
+        elseif ((int)$operationtype == 16) 
+        {      // Confirmación de Preauthorization Diferida
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.md5($this->password));
-        } elseif ((int)$operationtype == 14) {		// Cancelación de Preauthorization Diferida
+        } 
+        elseif ((int)$operationtype == 14) 
+        {      // Cancelación de Preauthorization Diferida
             $hash = md5($this->merchantCode.$iduser.$tokenuser.$this->terminal.$operationtype.$reference.$amount.md5($this->password));
         }
 
@@ -1131,67 +1236,102 @@ class Paytpv
         $secureurlhash = false;
         $data = array();
 
-        $data["MERCHANT_MERCHANTCODE"]				= $this->merchantCode;
-        $data["MERCHANT_TERMINAL"]					= $this->terminal;
-        $data["OPERATION"]							= $operationtype;
-        $data["LANGUAGE"]							= $operationdata->Language;
-        $data["MERCHANT_MERCHANTSIGNATURE"]			= $operationdata->Hash;
-        $data["URLOK"]								= $operationdata->UrlOk;
-        $data["URLKO"]								= $operationdata->UrlKo;
-        $data["MERCHANT_ORDER"]						= $operationdata->Reference;
-        if ($operationdata->Secure3D != false) {
-            $data["3DSECURE"]						= $operationdata->Secure3D;
-        }
-        $data["MERCHANT_AMOUNT"]					= $operationdata->Amount;
-        if ($operationdata->Concept != "") {
-            $data["MERCHANT_PRODUCTDESCRIPTION"]	= $operationdata->Concept;
+        $data["MERCHANT_MERCHANTCODE"]              = $this->merchantCode;
+        $data["MERCHANT_TERMINAL"]                  = $this->terminal;
+        $data["OPERATION"]                          = $operationtype;
+        $data["LANGUAGE"]                           = $operationdata->Language;
+        $data["MERCHANT_MERCHANTSIGNATURE"]         = $operationdata->Hash;
+        $data["URLOK"]                              = (isset($operationdata->UrlOk)) ? $operationdata->UrlOk : '';
+        $data["URLKO"]                              = (isset($operationdata->UrlKo)) ? $operationdata->UrlKo : '' ;
+        $data["MERCHANT_ORDER"]                     = $operationdata->Reference;
+
+        if (isset($operationdata->Secure3D))
+        {
+            if ($operationdata->Secure3D != false)
+            {
+                $data["3DSECURE"]                       = $operationdata->Secure3D;
+            }
         }
 
-        if ((int)$operationtype == 1) {					// Authorization (execute_purchase)
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-        } elseif ((int)$operationtype == 3) {			// Preauthorization
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-        } elseif ((int)$operationtype == 6) {			// Confirmación de Preauthorization
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
-        } elseif ((int)$operationtype == 4) {			// Cancelación de Preauthorization
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
-        } elseif ((int)$operationtype == 9) {			// Subscription
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-            $data["SUBSCRIPTION_STARTDATE"]			= $operationdata->StartDate;
-            $data["SUBSCRIPTION_ENDDATE"]			= $operationdata->EndDate;
-            $data["SUBSCRIPTION_PERIODICITY"]		= $operationdata->Periodicity;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-        } elseif ((int)$operationtype == 109) {			// execute_purchase_token
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-        } elseif ((int)$operationtype == 110) {			// create_subscription_token
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-            $data["SUBSCRIPTION_STARTDATE"]			= $operationdata->StartDate;
-            $data["SUBSCRIPTION_ENDDATE"]			= $operationdata->EndDate;
-            $data["SUBSCRIPTION_PERIODICITY"]		= $operationdata->Periodicity;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-        } elseif ((int)$operationtype == 111) {			// create_preauthorization_token
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-        } elseif ((int)$operationtype == 13) {			// Deferred Preauthorization
-            $data["MERCHANT_CURRENCY"]				= $operationdata->Currency;
-            $data["MERCHANT_SCORING"]				= $operationdata->Scoring;
-        } elseif ((int)$operationtype == 16) {			// Deferred Confirmación de Preauthorization
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
-        } elseif ((int)$operationtype == 14) {			// Deferred  Cancelación de Preauthorization
-            $data["IDUSER"]							= $operationdata->IdUser;
-            $data["TOKEN_USER"]						= $operationdata->TokenUser;
+        if (isset($operationdata->Amount))
+        {
+            $data["MERCHANT_AMOUNT"]                    = $operationdata->Amount;
+        }
+
+        if (isset($operationdata->Concept))
+        {
+            if ($operationdata->Concept != "")
+            {
+                $data["MERCHANT_PRODUCTDESCRIPTION"]    = $operationdata->Concept;
+            }
+        }
+
+        if ((int)$operationtype == 1) // Authorization (execute_purchase)
+        {
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+        } 
+        elseif ((int)$operationtype == 3) // Preauthorization
+        {
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+        } 
+        elseif ((int)$operationtype == 6) // Confirmación de Preauthorization
+        {
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
+        } 
+        elseif ((int)$operationtype == 4) // Cancelación de Preauthorization
+        {
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
+        } 
+        elseif ((int)$operationtype == 9) // Subscription
+        {
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+            $data["SUBSCRIPTION_STARTDATE"]         = $operationdata->StartDate;
+            $data["SUBSCRIPTION_ENDDATE"]           = $operationdata->EndDate;
+            $data["SUBSCRIPTION_PERIODICITY"]       = $operationdata->Periodicity;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+        } 
+        elseif ((int)$operationtype == 109) // execute_purchase_token
+        {
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+        } 
+        elseif ((int)$operationtype == 110) // create_subscription_token
+        { 
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+            $data["SUBSCRIPTION_STARTDATE"]         = $operationdata->StartDate;
+            $data["SUBSCRIPTION_ENDDATE"]           = $operationdata->EndDate;
+            $data["SUBSCRIPTION_PERIODICITY"]       = $operationdata->Periodicity;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+        } 
+        elseif ((int)$operationtype == 111) 
+        {         // create_preauthorization_token
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+        } 
+        elseif ((int)$operationtype == 13) 
+        {          // Deferred Preauthorization
+            $data["MERCHANT_CURRENCY"]              = $operationdata->Currency;
+            $data["MERCHANT_SCORING"]               = $operationdata->Scoring;
+        } 
+        elseif ((int)$operationtype == 16) 
+        {          // Deferred Confirmación de Preauthorization
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
+        } 
+        elseif ((int)$operationtype == 14) 
+        {          // Deferred  Cancelación de Preauthorization
+            $data["IDUSER"]                         = $operationdata->IdUser;
+            $data["TOKEN_USER"]                     = $operationdata->TokenUser;
         }
 
         $content = "";
@@ -1224,7 +1364,8 @@ class Paytpv
     {
         $response = array("DS_ERROR_ID" => 1023);
 
-        if ($urlgen != "") {
+        if ($urlgen != "") 
+        {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $this->endpointurl.$urlgen);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,5);
@@ -1232,12 +1373,18 @@ class Paytpv
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = curl_exec($ch);
 
-            if($errno = curl_errno($ch)) {
+            if($errno = curl_errno($ch)) 
+            {
                 $response = array("DS_ERROR_ID" => 1021);
-            } else {
-                if ((strpos($output, "Error: ") == 0 && strpos($output, "Error: ") !== false) || (strpos($output, "<!-- Error: ") == 0 && strpos($output, "<!-- Error: ") !== false)) {
+            } 
+            else 
+            {
+                if ((strpos($output, "Error: ") == 0 && strpos($output, "Error: ") !== false) || (strpos($output, "<!-- Error: ") == 0 && strpos($output, "<!-- Error: ") !== false))
+                {
                     $response = array("DS_ERROR_ID" => (int)str_replace(array("<!-- Error: ", "Error: ", " -->"), "", $output));
-                } else {
+                } 
+                else 
+                {
                     $response = array("DS_ERROR_ID" => 0);
                 }
             }

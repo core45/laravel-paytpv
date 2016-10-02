@@ -1,7 +1,7 @@
 # laravel-paytpv
 Payment module of PAYTPV BankStore IFRAME/FULLSCREEN/XML/JET for Laravel 5.x
 
-#set-up
+#Setup
 composer require core45/laravel-paytpv @dev
 
 edit Laravel's conf/app.php and add:
