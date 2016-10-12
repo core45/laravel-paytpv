@@ -666,14 +666,18 @@ class Paytpv
         $operation->TokenUser = $tokenuser;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+
+
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        // if ($secure3d != false) 
+        // {
+        //     $operation->Secure3D = $secure3d;
+        // }
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
+        // if ($scoring) 
+        // {
+        //     $operation->Scoring = (int)$scoring;
+        // }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
