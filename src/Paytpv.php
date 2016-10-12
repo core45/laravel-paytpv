@@ -620,14 +620,8 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = $secure3d;
 
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -666,18 +660,8 @@ class Paytpv
         $operation->TokenUser = $tokenuser;
         $operation->Language = $lang;
         $operation->Concept = $description;
-
-
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
-        // if ($secure3d != false) 
-        // {
-        //     $operation->Secure3D = $secure3d;
-        // }
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
-        // if ($scoring) 
-        // {
-        //     $operation->Scoring = (int)$scoring;
-        // }
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -742,14 +726,8 @@ class Paytpv
         $operation->StartDate = $startdate;
         $operation->EndDate = $enddate;
         $operation->Periodicity = $periodicity;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -791,14 +769,8 @@ class Paytpv
         $operation->Periodicity = $periodicity;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -832,14 +804,8 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -876,10 +842,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
@@ -923,10 +886,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
@@ -971,14 +931,8 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
@@ -1018,14 +972,8 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
-        if ($scoring) 
-        {
-            $operation->Scoring = (int)$scoring;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -1062,10 +1010,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
@@ -1109,10 +1054,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        if ($secure3d != false) 
-        {
-            $operation->Secure3D = $secure3d;
-        }
+        $operation->Secure3D = ($secure3d) ? $secure3d : false;
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
