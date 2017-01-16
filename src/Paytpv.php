@@ -623,8 +623,8 @@ class Paytpv
         $operation->Language = $lang;
         $operation->Concept = $description;
         $operation->Secure3D = $secure3d;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
@@ -653,7 +653,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function ExecutePurchaseTokenUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $scoring = null, , $urlOK = false, $urlKO = false)
+    public function ExecutePurchaseTokenUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -668,8 +668,8 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -696,8 +696,8 @@ class Paytpv
         $operation->Type = 107;
         $operation->Reference = $transreference;
         $operation->Language = $lang;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -739,8 +739,8 @@ class Paytpv
         $operation->Periodicity = $periodicity;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -785,8 +785,8 @@ class Paytpv
         $operation->TokenUser = $tokenuser;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -823,8 +823,8 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -868,8 +868,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -914,8 +914,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -961,8 +961,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -999,8 +999,8 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -1044,8 +1044,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -1089,8 +1089,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
-        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
-        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -1217,8 +1217,8 @@ class Paytpv
         $data["OPERATION"]                          = $operationtype;
         $data["LANGUAGE"]                           = $operationdata->Language;
         $data["MERCHANT_MERCHANTSIGNATURE"]         = $operationdata->Hash;
-        $data["URLOK"]                              = (isset($operationdata->UrlOk)) ? $operationdata->UrlOk : '';
-        $data["URLKO"]                              = (isset($operationdata->UrlKo)) ? $operationdata->UrlKo : '' ;
+        $data["URLOK"]                              = (isset($operationdata->UrlOK)) ? $operationdata->UrlOK : '';
+        $data["URLKO"]                              = (isset($operationdata->UrlKO)) ? $operationdata->UrlKO : '' ;
         $data["MERCHANT_ORDER"]                     = $operationdata->Reference;
 
         if (isset($operationdata->Secure3D))
