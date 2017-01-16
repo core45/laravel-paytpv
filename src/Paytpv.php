@@ -33,6 +33,8 @@ class Paytpv
     private $endpoint;
     private $endpointurl;
     private $jetid;
+    private $urlOK;
+    private $urlKO;
 
     public function __construct()
     {
@@ -42,6 +44,8 @@ class Paytpv
         $this->jetid = config('paytpv.jetid');
         $this->endpoint = 'https://secure.paytpv.com/gateway/xml-bankstore?wsdl';
         $this->endpointurl = 'https://secure.paytpv.com/gateway/ifr-bankstore?';
+        $this->urlOK = config('paytpv.UrlOK');
+        $this->urlKO = config('paytpv.UrlKO');
     }
 
     /**
@@ -606,7 +610,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function ExecutePurchaseUrl($transreference, $amount, $currency, $lang = "ES", $description = false, $secure3d = false, $scoring = null)
+    public function ExecutePurchaseUrl($transreference, $amount, $currency, $lang = "ES", $description = false, $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -619,6 +623,8 @@ class Paytpv
         $operation->Language = $lang;
         $operation->Concept = $description;
         $operation->Secure3D = $secure3d;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
@@ -647,7 +653,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function ExecutePurchaseTokenUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $scoring = null)
+    public function ExecutePurchaseTokenUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $scoring = null, , $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -662,6 +668,9 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -679,7 +688,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function AddUserUrl($transreference, $lang = "ES")
+    public function AddUserUrl($transreference, $lang = "ES", $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -687,6 +696,8 @@ class Paytpv
         $operation->Type = 107;
         $operation->Reference = $transreference;
         $operation->Language = $lang;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -713,7 +724,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function CreateSubscriptionUrl($transreference, $amount, $currency, $startdate, $enddate, $periodicity, $lang = "ES", $secure3d = false, $scoring = null)
+    public function CreateSubscriptionUrl($transreference, $amount, $currency, $startdate, $enddate, $periodicity, $lang = "ES", $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -728,6 +739,9 @@ class Paytpv
         $operation->Periodicity = $periodicity;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -754,7 +768,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function CreateSubscriptionTokenUrl($transreference, $amount, $currency, $startdate, $enddate, $periodicity, $iduser, $tokenuser, $lang = "ES", $secure3d = false, $scoring = null)
+    public function CreateSubscriptionTokenUrl($transreference, $amount, $currency, $startdate, $enddate, $periodicity, $iduser, $tokenuser, $lang = "ES", $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -771,6 +785,9 @@ class Paytpv
         $operation->TokenUser = $tokenuser;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -793,7 +810,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function CreatePreauthorizationUrl($transreference, $amount, $currency, $lang = "ES", $description = false, $secure3d = false, $scoring = null)
+    public function CreatePreauthorizationUrl($transreference, $amount, $currency, $lang = "ES", $description = false, $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -806,6 +823,9 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -829,7 +849,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function PreauthorizationConfirmUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false)
+    public function PreauthorizationConfirmUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -843,12 +863,13 @@ class Paytpv
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
-
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -873,7 +894,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function PreauthorizationCancelUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false)
+    public function PreauthorizationCancelUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -893,6 +914,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -918,7 +941,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function ExecutePreauthorizationTokenUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $scoring = null)
+    public function ExecutePreauthorizationTokenUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -938,6 +961,8 @@ class Paytpv
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -961,7 +986,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function DeferredPreauthorizationUrl($transreference, $amount, $currency, $lang = "ES", $description = false, $secure3d = false, $scoring = null)
+    public function DeferredPreauthorizationUrl($transreference, $amount, $currency, $lang = "ES", $description = false, $secure3d = false, $scoring = null, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -974,6 +999,9 @@ class Paytpv
         $operation->Concept = $description;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
+
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
 
@@ -997,7 +1025,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function DeferredPreauthorizationConfirmUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false)
+    public function DeferredPreauthorizationConfirmUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -1011,12 +1039,13 @@ class Paytpv
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
-
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
@@ -1041,7 +1070,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function DeferredPreauthorizationCancelUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false)
+    public function DeferredPreauthorizationCancelUrl($transreference, $amount, $currency, $iduser, $tokenuser, $lang = "ES", $description = false, $secure3d = false, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -1055,12 +1084,13 @@ class Paytpv
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
         $operation->Secure3D = ($secure3d) ? $secure3d : false;
-
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
             return $this->SendResponse(array("DS_ERROR_ID" => $check_user_exist->DS_ERROR_ID));
         }
+        $operation->UrlOK = ($urlOK) ? $urlOK : $token->urlOK;
+        $operation->UrlKO = ($urlKO) ? $urlOK : $token->urlKO;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
         $lastrequest = $this->ComposeURLParams($operation, $operation->Type);
