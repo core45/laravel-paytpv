@@ -606,6 +606,8 @@ class Paytpv
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -649,6 +651,8 @@ class Paytpv
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -684,6 +688,8 @@ class Paytpv
      * Devuelve la URL para lanzar un add_user bajo IFRAME/Fullscreen
      * @param string $transreference Identificador único de la transacción
      * @param string $lang Idioma de los literales de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -720,6 +726,8 @@ class Paytpv
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -764,6 +772,8 @@ class Paytpv
      * @param string $lang Idioma de los literales de la transacción
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -806,6 +816,8 @@ class Paytpv
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -845,6 +857,8 @@ class Paytpv
      * @param string $lang Idioma de los literales de la transacción
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -890,6 +904,8 @@ class Paytpv
      * @param string $lang Idioma de los literales de la transacción
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -937,6 +953,8 @@ class Paytpv
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -982,6 +1000,8 @@ class Paytpv
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
      * @param integer $scoring (optional) Valor de scoring de riesgo de la transacción
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -1021,6 +1041,8 @@ class Paytpv
      * @param string $lang Idioma de los literales de la transacción
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
@@ -1066,6 +1088,8 @@ class Paytpv
      * @param string $lang Idioma de los literales de la transacción
      * @param string $description Descripción de la operación
      * @param string $secure3d Forzar la operación por 0 = No segura y 1 = Segura mediante 3DSecure
+     * @param string $urlOK URL to redirect in case of successful operation
+     * @param string $urlKO URL to redirect in case of unsuccessful operation
      * @return object Objeto de respuesta de la operación
      * @version 1.0 2016-06-06
      */
