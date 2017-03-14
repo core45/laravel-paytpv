@@ -695,7 +695,7 @@ class Paytpv
      * @version 1.0 2016-06-06
      */
 
-    public function AddUserUrl($transreference, $lang = "ES", $urlOK = false, $urlKO = false)
+    public function AddUserUrl($transreference, $lang = "ES", $secure3d = false, $urlOK = false, $urlKO = false)
     {
         $pretest = array();
 
@@ -703,6 +703,7 @@ class Paytpv
         $operation->Type = 107;
         $operation->Reference = $transreference;
         $operation->Language = $lang;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
