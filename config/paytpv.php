@@ -15,5 +15,6 @@ return [
     'jetid'         => NULL, // Optional, if BankStore JET is not used live NULL here
     'UrlOK'         => "", //default URL to redirect after successful operation
     'UrlKO'         => "", //default URL to redirect after unsuccessful operation
+    'secure3d'      => false, //default setting of secudre3D
     
 ];

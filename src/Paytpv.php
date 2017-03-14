@@ -35,6 +35,7 @@ class Paytpv
     private $jetid;
     private $urlOK;
     private $urlKO;
+    private $secure3d;
 
     public function __construct()
     {
@@ -46,6 +47,7 @@ class Paytpv
         $this->endpointurl = 'https://secure.paytpv.com/gateway/ifr-bankstore?';
         $this->urlOK = config('paytpv.UrlOK');
         $this->urlKO = config('paytpv.UrlKO');
+        $this->secure3d = config('paytpv.secure3d');
     }
 
     /**
@@ -624,11 +626,10 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        $operation->Secure3D = $secure3d;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
 
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
 
         $operation->Hash = $this->GenerateHash($operation, $operation->Type);
@@ -670,7 +671,7 @@ class Paytpv
         $operation->TokenUser = $tokenuser;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
@@ -745,7 +746,7 @@ class Paytpv
         $operation->StartDate = $startdate;
         $operation->EndDate = $enddate;
         $operation->Periodicity = $periodicity;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
@@ -793,7 +794,7 @@ class Paytpv
         $operation->Periodicity = $periodicity;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
@@ -833,7 +834,7 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
@@ -876,7 +877,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
@@ -923,7 +924,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
 
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
@@ -972,7 +973,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
@@ -1017,7 +1018,7 @@ class Paytpv
         $operation->Currency = $currency;
         $operation->Language = $lang;
         $operation->Concept = $description;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $operation->Scoring = ($scoring) ? (int)$scoring : null;
         $operation->UrlOK = ($urlOK) ? $urlOK : $this->urlOK;
         $operation->UrlKO = ($urlKO) ? $urlOK : $this->urlKO;
@@ -1060,7 +1061,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
@@ -1107,7 +1108,7 @@ class Paytpv
         $operation->Concept = $description;
         $operation->IdUser = $iduser;
         $operation->TokenUser = $tokenuser;
-        $operation->Secure3D = ($secure3d) ? $secure3d : false;
+        $operation->Secure3D = ($secure3d) ? $secure3d : $this->secure3d;
         $check_user_exist = $this->InfoUser($operation->IdUser, $operation->TokenUser);
         if ($check_user_exist->DS_ERROR_ID != 0) 
         {
